@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>module-test 03</title>
+</head>
+
+<body>
+    <div id="info"></div>
+
+    <script type="module">//如此即可使用mjs
+        import Person from './person.js';
+        const p3 = new Person('Bill', 30);
+        p3.gender = 'male';
+
+        info.innerText = p3.toString();
+
+    </script>
+    <script type="module">//如此即可使用mjs
+    
+        // console.log(p3.toString());//不同script的module會分開匯入，所以變數不能混用，會跳錯
+
+    </script>
+</body>
+
+</html>
