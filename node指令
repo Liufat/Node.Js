@@ -1,0 +1,19 @@
+npm un -g "套件名稱" 全域移除套件
+npm i --
+npx nodemon "檔案路徑" 執行開發區域nodemon
+
+package->scripts->"start":"nodemon src/05/http-server01.js",
+npm start
+
+package->scripts->"指令名稱(ex:dev)":"nodemon src/05/http-server01.js",
+npm run dev
+
+code.用vs code打開
+
+git clone專案後，輸入npm i ，會自動安裝package內設定的套件
+
+pm2 -v
+pm2 start "檔案路徑"
+pm2 ls
+pm2 stop 0
+pm2 del all
