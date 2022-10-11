@@ -5,6 +5,8 @@ const express = require('express');
 //建立物件
 const app = express();
 //建立路由
+
+app.use(express.static('1011-public'))
 app.get('/', (req, res) => {
     res.send(`<h2>你好</h2>`);
 })
