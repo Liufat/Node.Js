@@ -19,6 +19,11 @@ app.get('/json-test', (req, res)=>{
     res.json({name:'sinder1', age:30});
     // res.send({name:'sinder2', age:30});/重複輸出的話只會輸出第一筆，且終端機會報錯
 })
+app.get('/sales-json',(req,res)=>{
+    const sales = require(__dirname + '/1011-deta/sales');
+    console.log(sales);
+    res.send("123");
+})
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
 //C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
