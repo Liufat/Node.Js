@@ -6,11 +6,13 @@ const express = require('express');
 const app = express();
 //建立路由
 
-app.use(express.static('1011-public'))
+
 app.get('/', (req, res) => {
     res.send(`<h2>你好</h2>`);
 })
-
+app.use(express.static('1011-public'))
+app.use(express.static('node_modules/bootstrap/dist'))
+//C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
 app.use((req,res)=>{
     // res.type('text/plain');//純文字，如果沒設定預設是type:html
     res.status(404).send('<h1>找不到頁面</h1>');
