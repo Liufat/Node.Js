@@ -1,18 +1,27 @@
 <%- include('parts/html-head') %>
-<%- include('parts/navbar') %>
+    <%- include('parts/navbar') %>
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <form method="post">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
-                            <input type="text" class="form-control" id="email" name="email"
-                                aria-describedby="emailHelp">
-                            <div id="emailHelp" class="form-text"></div>
+                            <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp"
+                                value="">
+                            <% if(typeof email!=='undefined' ){%>
+                                <div class="form-text">
+                                    <%= email %>
+                                </div>
+                                <% } %>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control" id="password" name="password" value="">
+                            <div class="form-text">
+                                <%= locals.password ? password : '' %>
+                            </div>
+                            <!-- 所有變數，傳進來後都會存在一個叫locals的物件裡 -->
+                            <!-- 用這個方式解決衝突會比較好 -->
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
@@ -20,5 +29,5 @@
             </div>
         </div>
 
-<%- include('parts/scripts') %>
-<%- include('parts/html-foot') %>
+        <%- include('parts/scripts') %>
+            <%- include('parts/html-foot') %>
