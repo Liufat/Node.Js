@@ -24,6 +24,17 @@ app.get('/sales-json', (req, res) => {
     // console.log(sales);
     res.render("sales-json", { sales });
 })
+
+app.get('/try-qs',(req,res)=>{
+    res.json(req.query);
+})
+
+
+const urlencodedParser = express.urlencoded({extended:false});
+app.post('/try-post',urlencodedParser,(req,res)=>{
+    res.json(req.body);
+})
+
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
 //C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
