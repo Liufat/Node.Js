@@ -19,7 +19,7 @@ app.use(express.static('node_modules/bootstrap/dist'))
 //C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
 app.use((req, res) => {
     // res.type('text/plain');//純文字，如果沒設定預設是type:html
-    res.status(404).send('<h1>找不到頁面</h1>');
+    res.status(404).render('404');
 })
 
 
