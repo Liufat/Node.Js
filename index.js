@@ -12,7 +12,8 @@ app.set('views', '1011-views')
 //top-level middleware
 //讀取資料檔頭，如果content type=x-www-form-urlencoded，則先進行解析後再往下進行
 app.use(express.urlencoded({extended:false}));
-
+app.use(express.json());
+//content type=application/json則解析後再往下進行
 app.get('/', (req, res) => {
     // res.send(`<h2>你好</h2>`);
     res.render('main', { name: 'Shinder' });
