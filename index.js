@@ -9,6 +9,10 @@ const app = express();
 app.set('view engine', 'ejs')//set要放在最前面
 app.set('views', '1011-views')
 
+//top-level middleware
+//讀取資料檔頭，如果content type=x-www-form-urlencoded，則先進行解析後再往下進行
+app.use(express.urlencoded({extended:false}));
+
 app.get('/', (req, res) => {
     // res.send(`<h2>你好</h2>`);
     res.render('main', { name: 'Shinder' });
@@ -30,8 +34,9 @@ app.get('/try-qs',(req,res)=>{
 })
 
 
-const urlencodedParser = express.urlencoded({extended:false});
-app.post('/try-post',urlencodedParser,(req,res)=>{
+// const urlencodedParser = express.urlencoded({extended:false});
+//有top-level middleware的話就不需要middleware了
+app.post('/try-post',(req,res)=>{
     res.json(req.body);
     //post資料要使用urlrncoded方法，先做解析後才能傳出
     //因為沒有畫面，要使用Postman/body/encoded去做測試
