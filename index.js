@@ -7,22 +7,22 @@ const app = express();
 //建立路由
 
 app.set('view engine', 'ejs')//set要放在最前面
-app.set('views','1011-views')
+app.set('views', '1011-views')
 
 app.get('/', (req, res) => {
     // res.send(`<h2>你好</h2>`);
     res.render('main', { name: 'Shinder' });
-              //樣板名    //要傳的變數
+    //樣板名    //要傳的變數
 })
 
-app.get('/json-test', (req, res)=>{
-    res.json({name:'sinder1', age:30});
+app.get('/json-test', (req, res) => {
+    res.json({ name: 'sinder1', age: 30 });
     // res.send({name:'sinder2', age:30});/重複輸出的話只會輸出第一筆，且終端機會報錯
 })
-app.get('/sales-json',(req,res)=>{
+app.get('/sales-json', (req, res) => {
     const sales = require(__dirname + '/1011-deta/sales');
-    console.log(sales);
-    res.send("123");
+    // console.log(sales);
+    res.render("sales-json", { sales });
 })
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
