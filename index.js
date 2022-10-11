@@ -33,6 +33,7 @@ app.get('/try-qs',(req,res)=>{
 const urlencodedParser = express.urlencoded({extended:false});
 app.post('/try-post',urlencodedParser,(req,res)=>{
     res.json(req.body);
+    //post資料要使用urlrncoded方法，先做解析後才能傳出
     //因為沒有畫面，要使用Postman/body/encoded去做測試
 })
 
