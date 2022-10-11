@@ -33,6 +33,7 @@ app.get('/try-qs',(req,res)=>{
 const urlencodedParser = express.urlencoded({extended:false});
 app.post('/try-post',urlencodedParser,(req,res)=>{
     res.json(req.body);
+    //因為沒有畫面，要使用Postman/body/encoded去做測試
 })
 
 app.use(express.static('1011-public'))
