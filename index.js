@@ -42,6 +42,12 @@ app.post('/try-post',(req,res)=>{
     //post資料要使用urlrncoded方法，先做解析後才能傳出
     //因為沒有畫面，要使用Postman/body/encoded去做測試
 })
+app.get('/try-post-form',(req,res)=>{
+    res.render('try-post-form');
+})
+app.post('/try-post-form',(req,res)=>{
+    res.json(req.body);
+})
 
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
