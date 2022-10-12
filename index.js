@@ -12,6 +12,8 @@ const multer = require('multer');
 //指定路徑
 const upload = multer({ dest: 'tmp_uploads/' });
 
+const fs = require('fs').promises;
+
 app.set('view engine', 'ejs')//set要放在最前面
 app.set('views', '1011-views')
 
@@ -56,8 +58,13 @@ app.post('/try-post-form', (req, res) => {
 })
 
 //圖片上傳
-app.post('/try-upload', upload.single('avatar'), (req, res) => {
-    res.json(req.file);
+app.post('/try-upload', upload.single('avatar'), async (req, res) => {
+    if (req.file && req.file.originalname) {
+        await fs.rename(req.file.path, `1011-public/imgs/${req.file.originalname}`);
+        res.json(req.file);
+    } else {
+        res.json({ msg: "上傳失敗" });
+    }
 })
 
 app.use(express.static('1011-public'))
