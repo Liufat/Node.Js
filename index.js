@@ -1,17 +1,23 @@
 require('dotenv').config();
 
+const { request } = require('express');
 //引入express
 const express = require('express');
 //建立物件
 const app = express();
 //建立路由
 
+//上傳圖片，先require multer
+const multer = require('multer');
+//指定路徑
+const upload = multer({ dest: 'tmp_uploads/' });
+
 app.set('view engine', 'ejs')//set要放在最前面
 app.set('views', '1011-views')
 
 //top-level middleware
 //讀取資料檔頭，如果content type=x-www-form-urlencoded，則先進行解析後再往下進行
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 //content type=application/json則解析後再往下進行
 app.get('/', (req, res) => {
@@ -30,23 +36,28 @@ app.get('/sales-json', (req, res) => {
     res.render("sales-json", { sales });
 })
 
-app.get('/try-qs',(req,res)=>{
+app.get('/try-qs', (req, res) => {
     res.json(req.query);
 })
 
 
 // const urlencodedParser = express.urlencoded({extended:false});
 //有top-level middleware的話就不需要middleware了
-app.post('/try-post',(req,res)=>{
+app.post('/try-post', (req, res) => {
     res.json(req.body);
     //post資料要使用urlrncoded方法，先做解析後才能傳出
     //因為沒有畫面，要使用Postman/body/encoded去做測試
 })
-app.get('/try-post-form',(req,res)=>{
+app.get('/try-post-form', (req, res) => {
     res.render('try-post-form');
 })
-app.post('/try-post-form',(req,res)=>{
+app.post('/try-post-form', (req, res) => {
     res.render('try-post-form', req.body);
+})
+
+//圖片上傳
+app.post('/try-upload', upload.single('avatar'), (req, res) => {
+    res.json(req.file);
 })
 
 app.use(express.static('1011-public'))
