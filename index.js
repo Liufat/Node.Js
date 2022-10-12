@@ -66,7 +66,7 @@ app.post('/try-upload', upload.single('avatar'), async (req, res) => {
     // } else {
     //     res.json({ msg: "上傳失敗" });
     // }
-    res.json(req.file);
+    res.json(req.file);//顯示結果而已，沒有這段一樣會上傳
 
 })
 
