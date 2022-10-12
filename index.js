@@ -10,7 +10,8 @@ const app = express();
 //上傳圖片，先require multer
 const multer = require('multer');
 //指定路徑
-const upload = multer({ dest: 'tmp_uploads/' });
+// const upload = multer({ dest: 'tmp_uploads/' });
+const upload = require(__dirname + '/modules/upload-imgs');
 
 const fs = require('fs').promises;
 
@@ -59,12 +60,14 @@ app.post('/try-post-form', (req, res) => {
 
 //圖片上傳
 app.post('/try-upload', upload.single('avatar'), async (req, res) => {
-    if (req.file && req.file.originalname) {
-        await fs.rename(req.file.path, `1011-public/imgs/${req.file.originalname}`);
-        res.json(req.file);
-    } else {
-        res.json({ msg: "上傳失敗" });
-    }
+    // if (req.file && req.file.originalname) {
+    //     await fs.rename(req.file.path, `1011-public/imgs/${req.file.originalname}`);
+    //     res.json(req.file);
+    // } else {
+    //     res.json({ msg: "上傳失敗" });
+    // }
+    res.json(req.file);
+
 })
 
 app.use(express.static('1011-public'))
