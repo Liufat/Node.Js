@@ -69,6 +69,9 @@ app.post('/try-upload', upload.single('avatar'), async (req, res) => {
     res.json(req.file);//顯示結果而已，沒有這段一樣會上傳
 
 })
+app.post('/try-upload2', upload.array('photos'), async(req,res)=>{
+    res.json(req.files);
+})
 
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
