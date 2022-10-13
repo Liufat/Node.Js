@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .photo {
+            display: inline-block;
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .photo img {
+            position: absolute;
+            width: 100%;
+        }
+
+        .photo .remove {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <form name="form1">
+        <input type="file" accept="image/*" onchange="upload()" name="photos" multiple>
+    </form>
+    <div id="photo-div">
+        <!-- <div class="photo">
+            <img src="" alt="">
+            <button class="remove" onclick="removeItem(evebt)">移除</button>
+        </div> -->
+    </div>
+
+
+    <script>
+
+        let photoData = [];
+        const photo_div = document.querySelector('#photo-div');//如果會常常用到的選取器，建議直接設成變數，避免每次執行function時都要重新搜尋整個頁面
+        const item_tpl_func = ({ filename }) => `<div class = "photo" data-id="${filename}">
+            <img src = "/uploads/${filename}" alt = "">
+            <button class="remove" onclick="removeItem(event)">移除</button>
+            </div>`;
+        async function upload() {
+            const fd = new FormData(document.form1);
+
+            const r = await fetch('/try-upload2', {
+                method: 'post',
+                body: fd
+            });
+
+            const result = await r.json();
+            //photoData = [...photoData, ...result];
+            photoData.push(...result);
+            render();
+        }
+        function render() {//重新渲染整個畫面
+            photo_div.innerHTML = photoData.map(obj => item_tpl_func(obj)).join('');
+        }
+        function removeItem(event) {
+            const item = event.target.closest('.photo');
+            const id = item.getAttribute('data-id');
+            console.log(id);
+            photoData = photoData.filter(obj => obj.filename !== id);//淺層複製一個陣列，篩選區和點選目標不同id的物件，然後丟回陣列內
+            render();
+        }
+    </script>
+</body>
+
+</html>

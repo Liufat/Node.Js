@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .photo {
+            display: inline-block;
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .photo img {
+            position: absolute;
+            width: 100%;
+        }
+
+        .photo .remove {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <form name="form1">
+        <input type="file" accept="image/*" onchange="upload()" name="photos" multiple>
+    </form>
+    <div id="photo-div">
+        <!-- <div class="photo">
+            <img src="" alt="">
+            <button class="remove" onclick="removeItem(evebt)">移除</button>
+        </div> -->
+    </div>
+
+
+    <script>
+
+        let photoData = [];
+        const item_tpl_func = ({ filename }) => `<div class = "photo" data-id="${filename}">
+            <img src = "/uploads/${filename}" alt = "">
+            <button class="remove" onclick="removeItem(event)">移除</button>
+            </div>`;
+        async function upload() {
+            const fd = new FormData(document.form1);
+
+            const r = await fetch('/try-upload2', {
+                method: 'post',
+                body: fd
+            });
+
+            const result = await r.json();
+            //photoData = [...photoData, ...result];
+            photoData.push(...result);
+            console.log(result);
+            let str = '';
+            if (result && result.length) {
+                str = result.map(obj => item_tpl_func(obj)).join('');
+            }
+            document.querySelector('#photo-div').innerHTML = str;
+        }
+
+        function removeItem(event) {
+            const item = event.target.closest('.photo');
+            const id = item.getAttribute('data-id');
+            console.log(id);
+            item.remove();
+            //這樣只有改到DOM，沒有刪改到資料本身
+        }
+    </script>
+</body>
+
+</html>
