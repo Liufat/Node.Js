@@ -73,6 +73,17 @@ app.post('/try-upload2', upload.array('photos'), async(req,res)=>{
     res.json(req.files);
 })
 
+app.get('/my-params1/:action?/:id?', async(req,res)=>{
+    res.json(req.params);
+})
+
+app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req,res)=>{
+    let u = req.url.slice(3);//從第三個字元(m/0)=>0開始
+    u = u.split('?')[0];//去掉query string
+    u = u.splut('-').join('');//去掉-
+    res.json({mobile:u});
+})
+
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
 //C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
