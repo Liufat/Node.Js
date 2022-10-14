@@ -14,6 +14,11 @@ const moment = require('moment-timezone');
 
 const db = require(__dirname + '/modules/db_connect2')
 
+const mysqlStore = require('express-mysql-session')(session);
+//直接呼叫這個function，然後把值傳出來
+const sessionStore = new mysqlStore({}, db);
+
+
 //上傳圖片，先require multer
 const multer = require('multer');
 //指定路徑
@@ -41,6 +46,7 @@ app.use(session({
     resave: false,//是否要強制回存？
     //以上兩個，為了避免版本變更改變程式預設值而導致錯誤，建議在此指定預設值
 
+    store:sessionStore,
     secret: "fiojcio2ojjioc2r2131940",//加密用的，隨便給他打
     cookie: {
         //預設值如下：
@@ -129,30 +135,30 @@ app.get('/try-session', (req, res) => {
     res.json(req.session);
 })
 
-app.get('/try-date',(req,res)=>{
+app.get('/try-date', (req, res) => {
     const now = new Date;
     const m = moment();
 
     res.send({
-        t1:now,
-        t2:now.toString(),
-        t3:now.toDateString(),
-        t4:now.toLocaleDateString(),
-        m:m.format('YYYY-MM-DD HH:mm:ss')
+        t1: now,
+        t2: now.toString(),
+        t3: now.toDateString(),
+        t4: now.toLocaleDateString(),
+        m: m.format('YYYY-MM-DD HH:mm:ss')
     })
 })
 
-app.get('/try-moment',(req,res)=>{
+app.get('/try-moment', (req, res) => {
     const fm = 'YYYY-MM-DD HH:mm:ss';
-    const m = moment('06/10/22','DD/MM/YY');
+    const m = moment('06/10/22', 'DD/MM/YY');
     res.json({
         m,
-        m1:m.format(fm),
-        m2:m.tz('Europe/London').format(fm)
+        m1: m.format(fm),
+        m2: m.tz('Europe/London').format(fm)
     })
 })
 
-app.get('/try-db',async (req,res)=>{
+app.get('/try-db', async (req, res) => {
     const [rows] = await db.query("SELECT * FROM address_book LIMIT 5");
     res.json(rows);
 })
