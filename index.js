@@ -85,6 +85,22 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 })
 app.use('/admin2', require(__dirname + '/routes/admin2'));
 
+
+
+const myMiddle = (req,res,next)=>{
+    res.locals = {...res.locals,shinder:'哈囉'};
+    res.locals.yoooo = 123456;
+    res.locals.yoooo2 = 1234567;
+    next();//必要
+}
+app.get('/try-middle',[myMiddle],(req,res)=>{
+    //middleware其實是陣列，一個執行完後，接收next()指令，然後執行下一個
+    res.json(res.locals);
+})
+
+
+
+
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
 //C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
