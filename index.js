@@ -8,6 +8,7 @@ const app = express();
 //建立路由
 
 const session = require('express-session');
+const { now } = require('moment-timezone');
 //引入session模組
 
 const moment = require('moment-timezone');
@@ -173,6 +174,17 @@ app.get('/try-db-add', async (req,res)=>{
     const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?,?,?,?,?,NOW())";
     
     const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
+    res.json(result);
+})
+app.get('/try-db-add2', async (req,res)=>{ //不建議用這種方式
+    const name = '生日哥';
+    const email = 'birthdaybro@gmail.com';
+    const birthday = '0000/00/00'
+    const mobile = '0911111111';
+    const address = '糟糕島';
+    const sql = "INSERT INTO `address_book` SET ?";
+    
+    const [result] = await db.query(sql, [{name, email, mobile, birthday, address,created_at:new Date()}]);
     res.json(result);
 })
 
