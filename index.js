@@ -117,6 +117,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
     res.json({ mobile: u });
 })
 app.use('/admin2', require(__dirname + '/routes/admin2'));
+app.use('/ad', require(__dirname + '/routes/address-book'));
 
 
 
