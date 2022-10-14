@@ -140,6 +140,16 @@ app.get('/try-date',(req,res)=>{
     })
 })
 
+app.get('/try-moment',(req,res)=>{
+    const fm = 'YYYY-MM-DD HH:mm:ss';
+    const m = moment('06/10/22','DD/MM/YY');
+    res.json({
+        m,
+        m1:m.format(fm),
+        m2:m.tz('Europe/London').format(fm)
+    })
+})
+
 //-------------------------------------------------------------
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
