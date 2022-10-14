@@ -24,6 +24,20 @@
             top: 0;
             right: 0;
         }
+
+        .photo .move-back {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 20px;
+        }
+
+        .photo .move-forward {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+        }
     </style>
 </head>
 
@@ -35,6 +49,8 @@
         <!-- <div class="photo">
             <img src="" alt="">
             <button class="remove" onclick="removeItem(event)">移除</button>
+            <button class="move-forward" onclick="moveForward(event)">往後</button>
+            <button class="move-back" onclick="moveBack(event)">往前</button>
         </div> -->
     </div>
 
@@ -46,6 +62,8 @@
         const item_tpl_func = ({ filename }) => `<div class = "photo" data-id="${filename}">
             <img src = "/uploads/${filename}" alt = "">
             <button class="remove" onclick="removeItem(event)">移除</button>
+            <button class="move-forward" onclick="moveForward(event)">往後</button>
+            <button class="move-back" onclick="moveBack(event)">往前</button>
             </div>`;
         async function upload() {
             const fd = new FormData(document.form1);
@@ -60,6 +78,12 @@
             photoData.push(...result);
             render();
         }
+        function getItemIndex(id) {
+            for (let i = 0; i < photoData.length; i++) {
+                const item = photoData[i];
+                if (item.filename === id) return i;
+            }
+        }
         function render() {//重新渲染整個畫面
             photo_div.innerHTML = photoData.map(obj => item_tpl_func(obj)).join('');
         }
@@ -68,6 +92,15 @@
             const id = item.getAttribute('data-id');
             console.log(id);
             photoData = photoData.filter(obj => obj.filename !== id);//淺層複製一個陣列，篩選區和點選目標不同id的物件，然後丟回陣列內
+            render();
+        }
+        function moveBack(event){
+            const item = event.target.closest('.photo');
+            const id = item.getAttribute('data-id');
+            const index = etItemIndex(id);
+            if(index <= 0 ) return;
+            const [currentItem] = photoData.splice(index,1);//取出指定index，1個
+            photoData.splice(index-1,0,currentItem);//在指定位置(index-1)，取出0個(=加入)，加入指定陣列
             render();
         }
     </script>
