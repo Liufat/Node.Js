@@ -10,6 +10,8 @@ const app = express();
 const session = require('express-session');
 //引入session模組
 
+const moment = require('moment-timezone');
+
 //上傳圖片，先require multer
 const multer = require('multer');
 //指定路徑
@@ -123,6 +125,19 @@ app.get('/try-session', (req, res) => {
     req.session.aaa ||= 0; //預設值
     req.session.aaa++;
     res.json(req.session);
+})
+
+app.get('/try-date',(req,res)=>{
+    const now = new Date;
+    const m = moment();
+
+    res.send({
+        t1:now,
+        t2:now.toString(),
+        t3:now.toDateString(),
+        t4:now.toLocaleDateString(),
+        m:m.format('YYYY-MM-DD HH:mm:ss')
+    })
 })
 
 //-------------------------------------------------------------
