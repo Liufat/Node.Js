@@ -44,6 +44,7 @@ app.use(session({
         // "expires": null,
         // "httpOnly": true,
         // "path": "/"
+        maxAge: 1_200_000 //20分鐘，單位：毫秒
     }
 }));
 
