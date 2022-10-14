@@ -12,6 +12,8 @@ const session = require('express-session');
 
 const moment = require('moment-timezone');
 
+const db = require(__dirname + '/modules/db_connect2')
+
 //上傳圖片，先require multer
 const multer = require('multer');
 //指定路徑
@@ -148,6 +150,11 @@ app.get('/try-moment',(req,res)=>{
         m1:m.format(fm),
         m2:m.tz('Europe/London').format(fm)
     })
+})
+
+app.get('/try-db',async (req,res)=>{
+    const [rows] = await db.query("SELECT * FROM address_book LIMIT 5");
+    res.json(rows);
 })
 
 //-------------------------------------------------------------
