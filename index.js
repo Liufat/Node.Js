@@ -17,6 +17,7 @@ const db = require(__dirname + '/modules/db_connect2')
 const mysqlStore = require('express-mysql-session')(session);
 //直接呼叫這個function，然後把值傳出來
 const sessionStore = new mysqlStore({}, db);
+                          //因為前面已經有連線物件了，所以留空物件
 
 
 //上傳圖片，先require multer
@@ -161,6 +162,18 @@ app.get('/try-moment', (req, res) => {
 app.get('/try-db', async (req, res) => {
     const [rows] = await db.query("SELECT * FROM address_book LIMIT 5");
     res.json(rows);
+})
+
+app.get('/try-db-add', async (req,res)=>{
+    const name = '生日哥';
+    const email = 'birthdaybro@gmail.com';
+    const birthday = '0000/00/00'
+    const mobile = '0911111111';
+    const address = '糟糕島';
+    const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?,?,?,?,?,NOW())";
+    
+    const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
+    res.json(result);
 })
 
 //-------------------------------------------------------------
