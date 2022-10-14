@@ -7,6 +7,9 @@ const express = require('express');
 const app = express();
 //建立路由
 
+const session = require('express-session');
+//引入session模組
+
 //上傳圖片，先require multer
 const multer = require('multer');
 //指定路徑
@@ -28,6 +31,23 @@ app.get('/', (req, res) => {
     res.render('main', { name: 'Shinder' });
     //樣板名    //要傳的變數
 })
+
+app.use(session({
+    saveUninitialized: false,//session在還沒有初始化時，是否要儲存？
+    resave: false,//是否要強制回存？
+    //以上兩個，為了避免版本變更改變程式預設值而導致錯誤，建議在此指定預設值
+
+    secret: "fiojcio2ojjioc2r2131940",//加密用的，隨便給他打
+    cookie: {
+        //預設值如下：
+        // "originalMaxAge": null,
+        // "expires": null,
+        // "httpOnly": true,
+        // "path": "/"
+    }
+}));
+
+
 
 app.get('/json-test', (req, res) => {
     res.json({ name: 'sinder1', age: 30 });
@@ -87,20 +107,24 @@ app.use('/admin2', require(__dirname + '/routes/admin2'));
 
 
 
-const myMiddle = (req,res,next)=>{
-    res.locals = {...res.locals,shinder:'哈囉'};
+const myMiddle = (req, res, next) => {
+    res.locals = { ...res.locals, shinder: '哈囉' };
     res.locals.yoooo = 123456;
     res.locals.yoooo2 = 1234567;
     next();//必要
 }
-app.get('/try-middle',[myMiddle],(req,res)=>{
+app.get('/try-middle', [myMiddle], (req, res) => {
     //middleware其實是陣列，一個執行完後，接收next()指令，然後執行下一個
     res.json(res.locals);
 })
 
+app.get('/try-session', (req, res) => {
+    req.session.aaa ||= 0; //預設值
+    req.session.aaa++;
+    res.json(req.session);
+})
 
-
-
+//-------------------------------------------------------------
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
 //C:\Users\劉肥\OneDrive\前端資料\07.NodeJS\mfee29-node\node_modules\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
