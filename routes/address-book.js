@@ -9,7 +9,7 @@ router.use((req, res, next) => {
     next();
 })
 
-async function getListData(req) { //將功能分開寫
+async function getListData(req,res) { //將功能分開寫
     const perPage = 10;
     let page = +req.query.page || 1;//+號是將字串轉換成數值
     if (page < 1) {
