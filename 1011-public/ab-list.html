@@ -98,11 +98,11 @@
                             </a>
                         </li>
                         ${Array(11).fill(1).map((el, i) => {
-                            console.log(el,i)
-                             const p = page - 5 + i;
-                             if (p < 1 || p > totalPages) return '';
-                                return `<li class="page-item ${p===page ? 'active' : ''}">
-                                         <a class="page-link" href="#">${p}</a>
+            // console.log(el,i)
+            const p = page - 5 + i;
+            if (p < 1 || p > totalPages) return '';
+            return `<li class="page-item ${p === page ? 'active' : ''}">
+                                         <a class="page-link" href="?page=${p}">${p}</a>
                         </li>`
         }).join('')}
                        
@@ -143,13 +143,15 @@
                     </tbody>
                 </table>`;
     }
-
-    fetch('/ab/api')
+    const tCon = document.querySelector('.table-container')
+    const pCon = document.querySelector('.pagi-container')
+    const search = location.search;
+    fetch('/ab/api' + search)
         .then(r => r.json())
         .then(result => {
             console.log(result)
-            document.querySelector('.table-container').innerHTML = renderTable(result);
-            document.querySelector('.pagi-container').innerHTML = renderPagi(result);
+            tCon.innerHTML = renderTable(result);
+            pCon.innerHTML = renderPagi(result);
         })//獲取資料後，將資料帶入function renderTable來做表格的渲染
 </script>
 
