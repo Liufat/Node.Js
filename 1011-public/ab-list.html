@@ -87,6 +87,7 @@
     </div>
 </body>
 <script src="/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.5/dayjs.min.js"></script>
 <script>
 
     function renderPagi({ page, totalPages }) {
@@ -134,7 +135,7 @@
                                 <td>${el.name}</td>
                                 <td>${el.mobile}</td>
                                 <td>${el.email}</td>
-                                <td>${el.birthday}</td>
+                                <td>${dayjs(el.birthday).format('YYYY-MM-DD')}</td>
                                 <td>${el.address}</td>
                             </tr>
                             `;
