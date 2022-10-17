@@ -18,7 +18,7 @@ const db = require(__dirname + '/modules/db_connect2')
 const mysqlStore = require('express-mysql-session')(session);
 //直接呼叫這個function，然後把值傳出來
 const sessionStore = new mysqlStore({}, db);
-                          //因為前面已經有連線物件了，所以留空物件
+//因為前面已經有連線物件了，所以留空物件
 
 
 //上傳圖片，先require multer
@@ -48,7 +48,7 @@ app.use(session({
     resave: false,//是否要強制回存？
     //以上兩個，為了避免版本變更改變程式預設值而導致錯誤，建議在此指定預設值
 
-    store:sessionStore,
+    store: sessionStore,
     secret: "fiojcio2ojjioc2r2131940",//加密用的，隨便給他打
     cookie: {
         //預設值如下：
@@ -60,7 +60,11 @@ app.use(session({
     }
 }));
 
-
+app.use((req,res,next)=>{
+    res.locals.toDateString = (d)=>moment(d).format('YYYY-MM-DD');
+    res.locals.toDateTimeString = (d)=>moment(d).format('YYYY-MM-DD HH:mm:ss');
+    next();
+})
 
 app.get('/json-test', (req, res) => {
     res.json({ name: 'sinder1', age: 30 });
@@ -117,7 +121,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
     res.json({ mobile: u });
 })
 app.use('/admin2', require(__dirname + '/routes/admin2'));
-app.use('/ad', require(__dirname + '/routes/address-book'));
+
 
 
 
@@ -166,29 +170,30 @@ app.get('/try-db', async (req, res) => {
     res.json(rows);
 })
 
-app.get('/try-db-add', async (req,res)=>{
+app.get('/try-db-add', async (req, res) => {
     const name = '生日哥';
     const email = 'birthdaybro@gmail.com';
     const birthday = '0000/00/00'
     const mobile = '0911111111';
     const address = '糟糕島';
     const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?,?,?,?,?,NOW())";
-    
+
     const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
     res.json(result);
 })
-app.get('/try-db-add2', async (req,res)=>{ //不建議用這種方式
+app.get('/try-db-add2', async (req, res) => { //不建議用這種方式
     const name = '生日哥';
     const email = 'birthdaybro@gmail.com';
     const birthday = '0000/00/00'
     const mobile = '0911111111';
     const address = '糟糕島';
     const sql = "INSERT INTO `address_book` SET ?";
-    
-    const [result] = await db.query(sql, [{name, email, mobile, birthday, address,created_at:new Date()}]);
+
+    const [result] = await db.query(sql, [{ name, email, mobile, birthday, address, created_at: new Date() }]);
     res.json(result);
 })
 
+app.use('/ab', require(__dirname + '/routes/address-book'));
 //-------------------------------------------------------------
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
