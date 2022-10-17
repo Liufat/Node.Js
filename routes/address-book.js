@@ -23,10 +23,10 @@ router.get(['/','/list'], async (req, res) => {
     if(search){
         where += ` AND \`name\` LIKE ${db.escape('%' +search+ '%')} `;
     }
-    res.type('text/plain; charset=utf-8')//編碼
-    return res.end(where);//測試
+    // res.type('text/plain; charset=utf-8')//編碼
+    // return res.end(where);//測試
 
-    const t_sql = "SELECT COUNT(1) totalRows FROM address_book";
+    const t_sql = `SELECT COUNT(1) totalRows FROM address_book ${where} `;
     const [[{ totalRows }]] = await db.query(t_sql);
     let totalPages = 0;
     let rows = [];
@@ -35,7 +35,7 @@ router.get(['/','/list'], async (req, res) => {
         if (page > totalPages) {
             return res.redirect(`?page=${totalPages}`);
         }
-        const sql = `SELECT * FROM address_book ORDER BY sid DESC LIMIT ${(page - 1) * perPage},${perPage}`;
+        const sql = `SELECT * FROM address_book ${where} ORDER BY sid DESC LIMIT ${(page - 1) * perPage},${perPage}`;
 
         [rows] = await db.query(sql);
     }
