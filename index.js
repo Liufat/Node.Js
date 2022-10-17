@@ -20,6 +20,7 @@ const mysqlStore = require('express-mysql-session')(session);
 const sessionStore = new mysqlStore({}, db);
 //因為前面已經有連線物件了，所以留空物件
 
+const cors = require('cors');
 
 //上傳圖片，先require multer
 const multer = require('multer');
@@ -42,6 +43,8 @@ app.get('/', (req, res) => {
     res.render('main', { name: 'Shinder' });
     //樣板名    //要傳的變數
 })
+
+app.use(cors());
 
 app.use(session({
     saveUninitialized: false,//session在還沒有初始化時，是否要儲存？
