@@ -147,45 +147,41 @@
     const tCon = document.querySelector('.table-container')
     const pCon = document.querySelector('.pagi-container')
     const search = location.search;
-    fetch('/ab/api' + search)
-        .then(r => r.json())
-        .then(result => {
-            // console.log(result)
-            tCon.innerHTML = renderTable(result);
-            pCon.innerHTML = renderPagi(result);
-        })//獲取資料後，將資料帶入function renderTable來做表格的渲染
+
+    async function getData() {//把畫面渲染的功能整合在一個function
+        let usp = new URLSearchParams(location.search);
+        const r = await fetch('/ab/api?' + usp.toString());
+        const result = await r.json();
+        console.log(result);
+        tCon.innerHTML = renderTable(result);
+        pCon.innerHTML = renderPagi(result);
+    }
+    const usp = new URLSearchParams(location.search);
+    if(usp.get('search')) document.forms[0].search.value = usp.get('search');
+    getData();//一進來就先呼叫
 
     function doSearch(event) {
         event.preventDefault();
         const f = event.currentTarget;
         // console.log(event.currentTarget);
-        console.log({ search: f.search.value });
+        // console.log({ search: f.search.value });
 
         const usp = new URLSearchParams({ search: f.search.value });
         history.pushState('', '', '?' + usp.toString());//*************
-        console.log(location.search);
-
-        fetch('/ab/api' + location.search)
-            .then(r => r.json())
-            .then(result => {
-                // console.log(result)
-                tCon.innerHTML = renderTable(result);
-                pCon.innerHTML = renderPagi(result);
-            })//獲取資料後，將資料帶入function renderTable來做表格的渲染
+       getData();
     }
     function gotoPage(p) {
-        const usp = new URLSearchParams({page: p});
-        history.pushState('','','?'+usp.toString());//*************
+        const usp = new URLSearchParams({ page: p });
+        usp.set('page',p);
         // console.log(location.search);
-
-        fetch('/ab/api' + location.search)
-        .then(r => r.json())
-        .then(result => {
-            // console.log(result)
-            tCon.innerHTML = renderTable(result);
-            pCon.innerHTML = renderPagi(result);
-        })//獲取資料後，將資料帶入function renderTable來做表格的渲染
+        history.pushState('', '', '?' + usp.toString());
+        getData();
     }
+
+    window.addEventListener('popstate',function(){
+        getData();
+    })
+
 </script>
 
 </html>
