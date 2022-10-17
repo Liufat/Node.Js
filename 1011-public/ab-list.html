@@ -21,8 +21,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <nav aria-label="Page navigation example">
+            <div class="col pagi-container">
+                <!-- <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item disabled">
                             <a class="page-link" href="?page=0">
@@ -39,7 +39,7 @@
                                 next</a>
                         </li>
                     </ul>
-                </nav>
+                </nav> -->
             </div>
         </div>
 
@@ -89,14 +89,32 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>
 
-    fetch('/ab/api')
-        .then(r => r.json())
-        .then(result => {
-            console.log(result)
-            document.querySelector('.table-container').innerHTML = renderTable(result);
-        })//獲取資料後，將資料帶入function renderTable來做表格的渲染
+    function renderPagi({ page, totalPages }) {
+        return ` <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">
+                                previes
+                            </a>
+                        </li>
+                        ${Array(11).fill(1).map((el, i) => {
+                            console.log(el,i)
+                             const p = page - 5 + i;
+                             if (p < 1 || p > totalPages) return '';
+                                return `<li class="page-item ${p===page ? 'active' : ''}">
+                                         <a class="page-link" href="#">${p}</a>
+                        </li>`
+        }).join('')}
+                       
+                        <li class="page-item ">
+                            <a class="page-link" href="?page=2">
+                                next</a>
+                        </li>
+                    </ul>
+                </nav>`
+    }
 
-    function renderTable({ rows }) {//帶入上面fetch獲取的資料內容
+    function renderTable({ rows }) {//帶入下面fetch獲取的資料內容
         return `<table class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -109,7 +127,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        ${rows.map(el => { //幫物件挖洞，將獲得的資料填入物件中
+                        ${rows.map(el => { //幫陣列挖洞，將獲得的資料填入陣列中
             return `
                             <tr>
                                 <td>${el.sid}</td>
@@ -120,14 +138,19 @@
                                 <td>${el.address}</td>
                             </tr>
                             `;
-        }).join('')//因為獲得的是物件，通常會自動加上逗號來分隔，這邊join空字串來避免
-    } 
+        }).join('')//因為獲得的是陣列，通常會自動加上逗號來分隔，這邊join空字串來避免
+            } 
                     </tbody>
                 </table>`;
     }
 
-
-
+    fetch('/ab/api')
+        .then(r => r.json())
+        .then(result => {
+            console.log(result)
+            document.querySelector('.table-container').innerHTML = renderTable(result);
+            document.querySelector('.pagi-container').innerHTML = renderPagi(result);
+        })//獲取資料後，將資料帶入function renderTable來做表格的渲染
 </script>
 
 </html>
