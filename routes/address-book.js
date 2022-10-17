@@ -21,7 +21,12 @@ router.get(['/','/list'], async (req, res) => {
     let search = req.query.search ? req.query.search.trim() : req.query.search;
     let where = ` WHERE 1 `
     if(search){
-        where += ` AND \`name\` LIKE ${db.escape('%' +search+ '%')} `;
+        where += ` AND 
+            ( 
+                \`name\` LIKE ${db.escape('%' +search+ '%')}
+            OR
+                \`address\` LIKE ${db.escape('%' +search+ '%')}
+            ) `;
     }
     // res.type('text/plain; charset=utf-8')//編碼
     // return res.end(where);//測試
