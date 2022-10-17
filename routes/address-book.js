@@ -18,7 +18,7 @@ router.get(['/','/list'], async (req, res) => {
         return res.redirect(req.baseUrl);//要加上return以結束程式
     }
 
-    let search = req.query.search ? req.query.search.trim() : req.query.search;
+    let search = req.query.search ? req.query.search.trim() : '';
     let where = ` WHERE 1 `
     if(search){
         where += ` AND 
@@ -44,7 +44,7 @@ router.get(['/','/list'], async (req, res) => {
 
         [rows] = await db.query(sql);
     }
-    res.render('address-book/list',{ totalRows, totalPages, perPage, page, rows });
+    res.render('address-book/list',{ totalRows, totalPages, perPage, page, rows, search, query:req.query });
 });
 
 module.exports = router;
