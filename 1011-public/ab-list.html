@@ -171,7 +171,7 @@
        getData();
     }
     function gotoPage(p) {
-        const usp = new URLSearchParams({ page: p });
+        const usp = new URLSearchParams( location.search );
         usp.set('page',p);
         // console.log(location.search);
         history.pushState('', '', '?' + usp.toString());
@@ -180,6 +180,12 @@
 
     window.addEventListener('popstate',function(){
         getData();
+        const usp = new URLSearchParams(location.search);
+        if(usp.get('search')){
+            document.forms[0].search.value = usp.get('search');
+        } else{
+            document.forms[0].search.value = "";
+        }
     })
 
 </script>
