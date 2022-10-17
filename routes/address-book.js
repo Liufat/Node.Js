@@ -9,9 +9,7 @@ router.use((req, res, next) => {
     next();
 })
 
-//CRUD
-
-router.get(['/','/list'], async (req, res) => {
+async function getListData(req) { //將功能分開寫
     const perPage = 10;
     let page = +req.query.page || 1;//+號是將字串轉換成數值
     if (page < 1) {
@@ -20,12 +18,12 @@ router.get(['/','/list'], async (req, res) => {
 
     let search = req.query.search ? req.query.search.trim() : '';
     let where = ` WHERE 1 `
-    if(search){
+    if (search) {
         where += ` AND 
             ( 
-                \`name\` LIKE ${db.escape('%' +search+ '%')}
+                \`name\` LIKE ${db.escape('%' + search + '%')}
             OR
-                \`address\` LIKE ${db.escape('%' +search+ '%')}
+                \`address\` LIKE ${db.escape('%' + search + '%')}
             ) `;
     }
     // res.type('text/plain; charset=utf-8')//編碼
@@ -44,7 +42,18 @@ router.get(['/','/list'], async (req, res) => {
 
         [rows] = await db.query(sql);
     }
-    res.render('address-book/list',{ totalRows, totalPages, perPage, page, rows, search, query:req.query });
+    return { totalRows, totalPages, perPage, page, rows, search, query: req.query };//return處理完的資料
+};
+
+//CRUD
+
+router.get(['/', '/list'], async (req, res) => { //匯入資料做渲染
+    const data = await getListData(req);
+    res.render('address-book/list', data);
 });
+
+router.get(['/api', '/api/list'], async (req, res) => {
+    res.json(await getListData(req));
+})
 
 module.exports = router;
