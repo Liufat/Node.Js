@@ -88,13 +88,15 @@
 </body>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>
-    fetch('/ab/api')
-    .then(r=>r.json())
-    .then(result=>{
-        console.log(result)
-    })
 
-    function renderTable(){
+    fetch('/ab/api')
+        .then(r => r.json())
+        .then(result => {
+            console.log(result)
+            document.querySelector('.table-container').innerHTML = renderTable(result);
+        })//獲取資料後，將資料帶入function renderTable來做表格的渲染
+
+    function renderTable({ rows }) {//帶入上面fetch獲取的資料內容
         return `<table class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -107,31 +109,25 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <td>
-                                1047
-                            </td>
-                            <td>
-                                生日哥
-                            </td>
-                            <td>
-                                0911111111
-                            </td>
-                            <td>
-                                birthdaybro@gmail.com
-                            </td>
-                            <td>
-                                1899-11-30
-                            </td>
-                            <td>
-                                糟糕島
-                            </td>
-                        </tr>
+                        ${rows.map(el => { //幫物件挖洞，將獲得的資料填入物件中
+            return `
+                            <tr>
+                                <td>${el.sid}</td>
+                                <td>${el.name}</td>
+                                <td>${el.mobile}</td>
+                                <td>${el.email}</td>
+                                <td>${el.birthday}</td>
+                                <td>${el.address}</td>
+                            </tr>
+                            `;
+        }).join('')//因為獲得的是物件，通常會自動加上逗號來分隔，這邊join空字串來避免
+    } 
                     </tbody>
                 </table>`;
     }
-    document.querySelector('.table-container').innerHTML = renderTable();
+
+
+
 </script>
 
 </html>
