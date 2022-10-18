@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require(__dirname + '/../modules/db_connect2')
 const router = express.Router();
+const upload = require(__dirname + '/../modules/upload-imgs')
 
 
 
@@ -53,8 +54,8 @@ router.get('/add',async (req,res)=>{
 });
 
 //修改資料
-router.post('/add',async (req,res)=>{
-
+router.post('/add',upload.none(),async (req,res)=>{
+    res.json(req.body);
 });
 
 
