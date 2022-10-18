@@ -46,6 +46,14 @@ app.get('/', (req, res) => {
 
 app.use(cors());
 
+const corsOptions = {
+    credentials:true,
+    origin:function(origin,callback){
+        console.log({origin});
+        callback(null,true);
+    }
+}
+
 app.use(session({
     saveUninitialized: false,//session在還沒有初始化時，是否要儲存？
     resave: false,//是否要強制回存？
