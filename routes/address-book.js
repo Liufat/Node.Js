@@ -47,6 +47,17 @@ async function getListData(req,res) { //將功能分開寫
 
 //CRUD
 
+//新增資料
+router.get('/add',async (req,res)=>{
+    res.render('address-book/add')
+});
+
+//修改資料
+router.post('/add',async (req,res)=>{
+
+});
+
+
 router.get(['/', '/list'], async (req, res) => { //匯入資料做渲染
     const data = await getListData(req);
     res.render('address-book/list', data);
