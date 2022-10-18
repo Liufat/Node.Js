@@ -39,18 +39,40 @@
         </div>
         <%- include('./../parts/scripts') %>
         <script>
-            function checkForm(event){
-                event.preventDefault();
+            //multipart
+            // function checkForm(event){
+            //     event.preventDefault();
 
-                const fd = new FormData(document.form1);
+            //     const fd = new FormData(document.form1);
 
-                fetch('',{
-                    method:'POST',
-                    body:fd
-                }).then(r=>r.json())
-                .then(result=>{
-                    console.log(result);
-                })
-            }
+            //     fetch('',{
+            //         method:'POST',
+            //         body:fd
+            //     }).then(r=>r.json())
+            //     .then(result=>{
+            //         console.log(result);
+            //     })
+            // }
+//...............................................................................................
+            //urlencoded
+            // function checkForm(event){
+            //     event.preventDefault();
+
+            //     const fd = new FormData(document.form1);
+            //     const usp = new URLSearchParams(fd);
+            //     // console.log(usp.toString());
+            //     fetch('',{
+            //         method:'POST',
+            //         body:usp.toString(),
+            //         headers:{
+            //             'Content-Type':'application/x-www-form-urlencoded'
+            //         }
+            //     }).then(r=>r.json())
+            //     .then(result=>{
+            //         console.log(result);
+            //     })
+            // }
+//...............................................................................................
+            
         </script>
             <%- include('./../parts/html-foot') %>
