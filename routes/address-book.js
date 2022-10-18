@@ -53,7 +53,6 @@ router.get('/add',async (req,res)=>{
     res.render('address-book/add')
 });
 
-//修改資料
 router.post('/add',upload.none(),async (req,res)=>{
     // res.json(req.body);
     const output = {
@@ -78,6 +77,18 @@ router.post('/add',upload.none(),async (req,res)=>{
     res.json(output);
 });
 
+//修改資料
+router.get('/edit/:sid', async (req,res)=>{
+    const sql = "SELECT * FROM address_book WHERE sid=? "
+    const [rows] = await db.query(sql, [req.params.sid]);
+    if(!rows || !rows.length){
+        return res.redirect(req.baseUrl);
+    }
+    res.render('address-book/edit',rows[0]);
+});
+router.put('/edit/:sid',async (req,res)=>{
+    res.json(req.body);
+});
 
 router.get(['/', '/list'], async (req, res) => { //匯入資料做渲染
     const data = await getListData(req);
