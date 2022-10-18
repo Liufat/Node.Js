@@ -90,7 +90,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.5/dayjs.min.js"></script>
 <script>
 
-    function renderPagi({ page, totalPages }) {
+//[TO DO LIST]
+//目標：轉換頁碼或輸入搜尋後，讓頁面隨之更新
+//1.從後台資料庫獲取資料
+//2.將資料一筆一筆，用form顯示在畫面上
+//3.點擊轉換頁碼後，用get的方式更新在querystring上
+//4.輸入搜尋結果後，用get方式更新在querystring上
+//5.捕捉querystring，更新從後台獲取的資料庫並重新渲染表格
+//**避免刷新整個頁面，只要重新渲染表格即可
+
+//5.渲染畫面
+
+//......................................................................................
+    function renderPagi({ page, totalPages }) { 
         return ` <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item disabled">
@@ -148,11 +160,15 @@
     const pCon = document.querySelector('.pagi-container')
     const search = location.search;
 
+//......................................................................................
+
+//1.獲取資料
     async function getData() {//把畫面渲染的功能整合在一個function
         let usp = new URLSearchParams(location.search);
-        const r = await fetch('/ab/api?' + usp.toString());
+        const r = await fetch('/ab/api?' + usp.toString());//從api獲取資料
         const result = await r.json();
         console.log(result);
+//帶入5.的function以渲染畫面
         tCon.innerHTML = renderTable(result);
         pCon.innerHTML = renderPagi(result);
     }
@@ -160,6 +176,9 @@
     if(usp.get('search')) document.forms[0].search.value = usp.get('search');
     getData();//一進來就先呼叫
 
+//......................................................................................
+
+//4.將搜尋關鍵字更新在querystring上
     function doSearch(event) {
         event.preventDefault();
         const f = event.currentTarget;
@@ -167,17 +186,24 @@
         // console.log({ search: f.search.value });
 
         const usp = new URLSearchParams({ search: f.search.value });
+//避免跳轉頁面
         history.pushState('', '', '?' + usp.toString());//*************
        getData();
     }
+
+//......................................................................................
+
+//3.點擊頁碼後，將資訊更新在querystring上
     function gotoPage(p) {
         const usp = new URLSearchParams( location.search );
         usp.set('page',p);
         // console.log(location.search);
+//避免跳轉頁面
         history.pushState('', '', '?' + usp.toString());
         getData();
     }
-
+//......................................................................................
+//額外功能：按上一頁後，讓搜尋欄內文字與querystring相同
     window.addEventListener('popstate',function(){
         getData();
         const usp = new URLSearchParams(location.search);
@@ -187,7 +213,7 @@
             document.forms[0].search.value = "";
         }
     })
-
+//......................................................................................
 </script>
 
 </html>
