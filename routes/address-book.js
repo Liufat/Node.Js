@@ -1,3 +1,4 @@
+const { request } = require('express');
 const express = require('express');
 const db = require(__dirname + '/../modules/db_connect2')
 const router = express.Router();
@@ -6,8 +7,12 @@ const upload = require(__dirname + '/../modules/upload-imgs')
 
 
 router.use((req, res, next) => {
-
-    next();
+    if(req.session.admin && req.session.admin.account){
+        next();
+    } else {
+        res.status(403).send('請先登入')
+    }
+    
 })
 
 async function getListData(req,res) { //將功能分開寫
