@@ -29,6 +29,8 @@
                                     <label for="address" class="form-label">地址</label>
                                     <textarea class="form-control" name="address" id="address" cols="30"
                                         rows="3"></textarea>
+                                    <input type="hidden" name="test" value="123">
+                                    <input type="hidden" name="test" value="456">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
@@ -73,6 +75,26 @@
             //     })
             // }
 //...............................................................................................
-            
+            //json
+            function checkForm(event){
+                event.preventDefault();
+
+                const fd = new FormData(document.form1);
+                const data = {};
+               for(let [k,v] of fd){
+                console.log({k,v});
+                data[k] = v; //缺點：不可以有重複名稱的欄位，不然後面的會把前面的值蓋掉(別的格式會自動生成一個陣列)
+               }
+               fetch('',{
+                    method:'POST',
+                    body:JSON.stringify(data),
+                    headers:{
+                        'Content-Type':'application/json'
+                    }
+                }).then(r=>r.json())
+                .then(result=>{
+                    console.log(result);
+                })
+            }
         </script>
             <%- include('./../parts/html-foot') %>
