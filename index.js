@@ -74,6 +74,7 @@ app.use(session({
 app.use((req,res,next)=>{
     res.locals.toDateString = (d)=>moment(d).format('YYYY-MM-DD');
     res.locals.toDateTimeString = (d)=>moment(d).format('YYYY-MM-DD HH:mm:ss');
+    res.locals.title = '生日網';
     next();
 })
 
