@@ -113,7 +113,13 @@ router.put('/edit/:sid',async (req,res)=>{
     res.json(output);
 });
 
+//刪除
+router.delete('/del/:sid',async(req,res)=>{
+    const sql = "DELETE FROM address_book WHERE sid=?";
+    const [result] = await db.query(sql, [req.params.sid]);
 
+    res.json({success: !!result.affectedRows});
+})
 
 router.get(['/', '/list'], async (req, res) => { //匯入資料做渲染
     const data = await getListData(req);
