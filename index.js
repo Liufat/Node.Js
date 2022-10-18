@@ -75,6 +75,7 @@ app.use((req,res,next)=>{
     res.locals.toDateString = (d)=>moment(d).format('YYYY-MM-DD');
     res.locals.toDateTimeString = (d)=>moment(d).format('YYYY-MM-DD HH:mm:ss');
     res.locals.title = '生日網';
+    res.locals.session = req.session;
     next();
 })
 
@@ -206,6 +207,19 @@ app.get('/try-db-add2', async (req, res) => { //不建議用這種方式
 })
 
 app.use('/ab', require(__dirname + '/routes/address-book'));
+
+app.get('/fake-login', (req,res)=>{
+    req.session.admin ={
+        id:12,
+        account:'shinder',
+        nickname:'小新'
+    };
+    res.redirect('/ab');
+});
+app.get('/logout', (req,res)=>{
+    delete req.session.admin;
+    res.redirect('/ab');
+})
 //-------------------------------------------------------------
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
