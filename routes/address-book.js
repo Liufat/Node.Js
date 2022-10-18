@@ -50,6 +50,7 @@ async function getListData(req,res) { //將功能分開寫
 
 //新增資料
 router.get('/add',async (req,res)=>{
+    res.locals.title = '新增資料 |' + res.locals.title;
     res.render('address-book/add')
 });
 
@@ -79,6 +80,7 @@ router.post('/add',upload.none(),async (req,res)=>{
 
 //修改資料
 router.get('/edit/:sid', async (req,res)=>{
+    res.locals.title = '修改資料 |' + res.locals.title;
     const sql = "SELECT * FROM address_book WHERE sid=? "
     const [rows] = await db.query(sql, [req.params.sid]);
     if(!rows || !rows.length){
@@ -87,8 +89,31 @@ router.get('/edit/:sid', async (req,res)=>{
     res.render('address-book/edit',rows[0]);
 });
 router.put('/edit/:sid',async (req,res)=>{
-    res.json(req.body);
+    const output = {
+        success:false,
+        code:0,
+        error:{},
+        postData:req.body
+    };
+    const sql = "UPDATE `address_book` SET `name`=?,`email`=?,`mobile`=?,`birthday`=?,`address`=? WHERE `sid`=?";
+
+    //TODO:檢查欄位的格式，可以用joi
+
+    const [result] = await db.query(sql,[
+        req.body.name,
+        req.body.email,
+        req.body.mobile,
+        req.body.birthday||null,
+        req.body.address,
+        req.params.sid
+    ])
+    console.log(result);
+    // if(result.affectedRows) output.success = true;
+    if(result.changedRows) output.success = true;
+    res.json(output);
 });
+
+
 
 router.get(['/', '/list'], async (req, res) => { //匯入資料做渲染
     const data = await getListData(req);
