@@ -47,10 +47,10 @@ app.get('/', (req, res) => {
 app.use(cors());
 
 const corsOptions = {
-    credentials:true,
-    origin:function(origin,callback){
-        console.log({origin});
-        callback(null,true);
+    credentials: true,
+    origin: function (origin, callback) {
+        console.log({ origin });
+        callback(null, true);
     }
 }
 
@@ -71,9 +71,9 @@ app.use(session({
     }
 }));
 
-app.use((req,res,next)=>{
-    res.locals.toDateString = (d)=>moment(d).format('YYYY-MM-DD');
-    res.locals.toDateTimeString = (d)=>moment(d).format('YYYY-MM-DD HH:mm:ss');
+app.use((req, res, next) => {
+    res.locals.toDateString = (d) => moment(d).format('YYYY-MM-DD');
+    res.locals.toDateTimeString = (d) => moment(d).format('YYYY-MM-DD HH:mm:ss');
     res.locals.title = '生日網';
     res.locals.session = req.session;
     next();
@@ -208,36 +208,62 @@ app.get('/try-db-add2', async (req, res) => { //不建議用這種方式
 
 app.use('/ab', require(__dirname + '/routes/address-book'));
 
-app.get('/fake-login', (req,res)=>{
-    req.session.admin ={
-        id:12,
-        account:'shinder',
-        nickname:'小新'
+app.get('/fake-login', (req, res) => {
+    req.session.admin = {
+        id: 12,
+        account: 'shinder',
+        nickname: '小新'
     };
     res.redirect('/ab');
 });
-app.get('/logout', (req,res)=>{
+app.get('/logout', (req, res) => {
     delete req.session.admin;
     res.redirect('/ab');
 })
 
-app.get('/cate' ,async (req,res)=>{
+
+app.get('/cate', async (req, res) => {
     const [rows] = await db.query("SELECT * FROM categories ORDER BY sid")
     const firsts = [];
-    for(let i of rows){
-        if(i.parent_sid===0){
+    for (let i of rows) {
+        if (i.parent_sid === 0) {
             firsts.push(i);
         }
     }
-    for(let f of firsts){
-        for(let i of rows){
-            if(f.sid===i.parent_sid){
+    for (let f of firsts) {
+        for (let i of rows) {
+            if (f.sid === i.parent_sid) {
                 f.children ||= [];
                 f.children.push(i)
             }
         }
     }
     res.json(firsts);
+})
+
+app.get('/cate2', async (req, res) => {
+    const [rows] = await db.query("SELECT * FROM categories ORDER BY sid")
+
+    const dict = {};
+
+    for (let i of rows) {
+        dict[i.sid] = i;
+    }
+
+    for (let i of rows) {
+        if (i.parent_sid != 0) {
+            const p = dict[i.parent_sid];
+            p.children ||= [];
+            p.children.push(i);
+        }
+    }
+    const firsts = [];
+    for (let i of rows) {
+        if (i.parent_sid === 0) {
+            firsts.push(i);
+        }
+    }
+res.json(firsts);
 })
 //-------------------------------------------------------------
 app.use(express.static('1011-public'))
