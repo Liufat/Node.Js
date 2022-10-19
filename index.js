@@ -220,6 +220,25 @@ app.get('/logout', (req,res)=>{
     delete req.session.admin;
     res.redirect('/ab');
 })
+
+app.get('/cate' ,async (req,res)=>{
+    const [rows] = await db.query("SELECT * FROM categories ORDER BY sid")
+    const firsts = [];
+    for(let i of rows){
+        if(i.parent_sid===0){
+            firsts.push(i);
+        }
+    }
+    for(let f of firsts){
+        for(let i of rows){
+            if(f.sid===i.parent_sid){
+                f.children ||= [];
+                f.children.push(i)
+            }
+        }
+    }
+    res.json(firsts);
+})
 //-------------------------------------------------------------
 app.use(express.static('1011-public'))
 app.use(express.static('node_modules/bootstrap/dist'))
